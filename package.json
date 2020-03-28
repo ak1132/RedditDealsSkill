@@ -1,0 +1,18 @@
+{
+  "name": "sneaker-deals-skill",
+  "version": "1.0.0",
+  "description": "A skill to give a flash briefing of the latest sneaker deals",
+  "main": "lambda/index.js",
+  "author": "Amogh Kulkarni",
+  "license": "ISC",
+  "scripts": {
+		"app": "node lambda/index.js"
+	},
+  "dependencies": {
+    "ask-sdk-core": "^2.7.0",
+    "ask-sdk-dynamodb-persistence-adapter": "^2.7.0",
+    "ask-sdk-model": "^1.28.0",
+    "ask-sdk-s3-persistence-adapter": "^2.7.0",
+    "snoowrap": "^1.21.0"
+  }
+}
