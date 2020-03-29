@@ -3,22 +3,30 @@
 "use strict";
 const Alexa = require("ask-sdk-core");
 const snoowrap = require("snoowrap");
-const DynamoDbAdapter = require("ask-sdk-dynamodb-persistence-adapter");
 const creds = require("../oauth_info.json");
-const fs = require("fs");
+const constants = require("./constants");
 
-const languageStrings = {
-  en: {
-    WELCOME_MSG:
-      "Welcome, you can say what's the latest deal on sneakers? Would you like to try?",
-    HELLO_MSG: "Hi, this is Reddit Dealer, how you doing?",
-    GOODBYE_MSG: "Thank you for using me, Goodbye",
-    FALLBACK_MSG: "Sorry, didn't understand you, can you try again?",
-    HELP_MSG: "Hey, how can I help?",
-    ERROR_MSG: "Sorry, there seems to be an error, Please try again",
-    REGISTER_MSG: "Here are the latest {{dealtype}} deals"
+// -------------------------------------------------------------------------------------
+
+const getPersistenceAdapter = tableName => {
+  const isAlexaHosted = () => {
+    return process.env.S3_PERSISTENCE_BUCKET;
+  };
+  if (isAlexaHosted()) {
+    const S3PersistenceAdapter = require("ask-sdk-s3-persistence-adapter");
+    return new S3PersistenceAdapter({
+      bucketName: process.env.S3_PERSISTENCE_BUCKET
+    });
+  } else {
+    const DynamoDBPersistenceAdapter = require("ask-sdk-dynamodb-persistence-adapter");
+    return new DynamoDBPersistenceAdapter({
+      tableName: tableName,
+      createTable: true
+    });
   }
 };
+
+// ------------------------------------------------------------------------------------
 
 const Reddit = new snoowrap({
   userAgent: creds.user_agent,
@@ -27,16 +35,61 @@ const Reddit = new snoowrap({
   refreshToken: creds.refresh_token
 });
 
-const getSubRedditDeals = async(dealType) => {
+const getSubRedditDeals = async dealType => {
   const listOfPosts = await Reddit.getSubreddit(dealType).getTop();
   let deal = [];
-  for (let i = 0; i < listOfPosts.length; i++){
+  for (let i = 0; i < listOfPosts.length; i++) {
     deal.push(listOfPosts[i].title);
   }
   return deal;
-}
+};
 
 // Promise.resolve(getSubRedditDeals()).then(console.log);
+//----------------------------------------------------------------------------------------
+
+/* INTERCEPTORS */
+
+const LoadPersistentAttributesRequestInterceptor = {
+  async process(handlerInput) {
+    const { attributesManager, requestEnvelope } = handlerInput;
+    if (Alexa.isNewSession(requestEnvelope)) {
+      const persistentAttributes =
+        (await attributesManager.getPersistentAttributes()) || {};
+      console.log(
+        "Loading from persistent storage: " +
+          JSON.stringify(persistentAttributes)
+      );
+      attributesManager.setSessionAttributes(persistentAttributes);
+    }
+  }
+};
+
+const SavePersistentAttributesResponseInterceptor = {
+  async process(handlerInput, response) {
+    if (!response) return;
+    const { attributesManager, requestEnvelope } = handlerInput;
+    const sessionAttributes = attributesManager.getSessionAttributes();
+    const shouldEndSession =
+      typeof response.shouldEndSession === "undefined"
+        ? true
+        : response.shouldEndSession;
+    if (
+      shouldEndSession ||
+      Alexa.getRequestType(requestEnvelope) === "SessionEndedRequest"
+    ) {
+      sessionAttributes["sessionCounter"] = sessionAttributes["sessionCounter"]
+        ? sessionAttributes["sessionCounter"] + 1
+        : 1;
+      console.log(
+        "Saving to persistent storage: " + JSON.stringify(sessionAttributes)
+      );
+      attributesManager.setPersistentAttributes(sessionAttributes);
+      await attributesManager.savePersistentAttributes();
+    }
+  }
+};
+
+// ----------------------------------------------------------------------------------------
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
     return (
@@ -44,14 +97,25 @@ const LaunchRequestHandler = {
     );
   },
   handle(handlerInput) {
-    const speakOutput = languageStrings.en.WELCOME_MSG;
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    const dealType = sessionAttributes["dealtype"];
+    const sessionCounter = sessionAttributes["sessionCounter"];
+
+    if (dealType !== null && dealType !== undefined) {
+      return GetDealsIntentHandler.handle(handlerInput);
+    }
+
+    const speakOutput = constants.languageStrings.en.WELCOME_MSG;
     return handlerInput.responseBuilder
       .speak(speakOutput)
-      .reprompt(speakOutput)
+      .addDelegateDirective({
+        name: "GetDealsIntent",
+        confirmationStatus: "NONE",
+        slots: {}
+      })
       .getResponse();
   }
 };
-
 
 const GetDealsIntentHandler = {
   canHandle(handlerInput) {
@@ -62,27 +126,33 @@ const GetDealsIntentHandler = {
   },
   handle(handlerInput) {
     const requestEnvelope = handlerInput.requestEnvelope;
-    const intent = requestEnvelope.intent;
-    
+    const intent = requestEnvelope.request;
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+
     if (intent.confirmationStatus === "CONFIRMED") {
-      const dealType = Alexa.getSlotValue(requestEnvelope, 'dealtype');
-      let deals = '';
+      const dealType = Alexa.getSlotValue(requestEnvelope, "dealtype");
       if (dealType.includes("sneaker")) {
-        deals = getSubRedditDeals("SneakerDeals"); //need the array
+        Promise.resolve(getSubRedditDeals("SneakerDeals")).then(
+          s =>
+            (sessionAttributes["speakStr"] = s.join(" and the next deal is "))
+        );
       } else if (dealType.includes("frugal")) {
-        deals = getSubRedditDeals("frugalmalefashion");
+        Promise.resolve(getSubRedditDeals("frugalmalefashion")).then(
+          s =>
+            (sessionAttributes["speakStr"] = s.join(" and the next deal is "))
+        );
       }
     }
 
     return (
       handlerInput.responseBuilder
-        .speak(languageStrings.en.HELLO_MSG)
+        .speak("Here are the deals,\n" + sessionAttributes["speakStr"])
+        .reprompt("Oops, something looks wrong, by the way, how you doin?")
         //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
         .getResponse()
     );
   }
 };
-
 
 const HelpIntentHandler = {
   canHandle(handlerInput) {
@@ -92,7 +162,7 @@ const HelpIntentHandler = {
     );
   },
   handle(handlerInput) {
-    const speakOutput = languageStrings.en.HELP_MSG;
+    const speakOutput = constants.languageStrings.en.HELP_MSG;
 
     return handlerInput.responseBuilder
       .speak(speakOutput)
@@ -100,7 +170,6 @@ const HelpIntentHandler = {
       .getResponse();
   }
 };
-
 
 const CancelAndStopIntentHandler = {
   canHandle(handlerInput) {
@@ -113,11 +182,10 @@ const CancelAndStopIntentHandler = {
     );
   },
   handle(handlerInput) {
-    const speakOutput = languageStrings.en.GOODBYE_MSG;
+    const speakOutput = constants.languageStrings.en.GOODBYE_MSG;
     return handlerInput.responseBuilder.speak(speakOutput).getResponse();
   }
 };
-
 
 const SessionEndedRequestHandler = {
   canHandle(handlerInput) {
@@ -164,7 +232,7 @@ const ErrorHandler = {
   },
   handle(handlerInput, error) {
     console.log(`~~~~ Error handled: ${error.stack}`);
-    const speakOutput = languageStrings.en.ERROR_MSG;
+    const speakOutput = constants.languageStrings.en.ERROR_MSG;
 
     return handlerInput.responseBuilder
       .speak(speakOutput)
@@ -186,4 +254,7 @@ exports.handler = Alexa.SkillBuilders.custom()
     IntentReflectorHandler // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
   )
   .addErrorHandlers(ErrorHandler)
+  .addRequestInterceptors(LoadPersistentAttributesRequestInterceptor)
+  .addResponseInterceptors(SavePersistentAttributesResponseInterceptor)
+  .withPersistenceAdapter(getPersistenceAdapter)
   .lambda();
