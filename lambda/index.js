@@ -1,21 +1,22 @@
 // Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
 // session persistence, api calls, and more.
-// For using snoowrap see https://browntreelabs.com/scraping-reddits-api-with-snoowrap/
-'use strict';
+"use strict";
 const Alexa = require("ask-sdk-core");
 const snoowrap = require("snoowrap");
 const DynamoDbAdapter = require("ask-sdk-dynamodb-persistence-adapter");
-const creds = require("../oauth_info.json")
+const creds = require("../oauth_info.json");
+const fs = require("fs");
 
 const languageStrings = {
   en: {
     WELCOME_MSG:
-      "Welcome, you can say what's the latest sneaker deal? Would you like to try?",
-    HELLO_MSG: "Hi, this is SneakerDeals, how you doing?",
+      "Welcome, you can say what's the latest deal on sneakers? Would you like to try?",
+    HELLO_MSG: "Hi, this is Reddit Dealer, how you doing?",
     GOODBYE_MSG: "Thank you for using me, Goodbye",
     FALLBACK_MSG: "Sorry, didn't understand you, can you try again?",
     HELP_MSG: "Hey, how can I help?",
-    ERROR_MSG: "Sorry, there seems to be an error, Please try again"
+    ERROR_MSG: "Sorry, there seems to be an error, Please try again",
+    REGISTER_MSG: "Here are the latest {{dealtype}} deals"
   }
 };
 
@@ -26,10 +27,16 @@ const Reddit = new snoowrap({
   refreshToken: creds.refresh_token
 });
 
-//Reddit.getSubreddit('SneakerDeals').getTop().then(s => console.log(s));
+const getSubRedditDeals = async(dealType) => {
+  const listOfPosts = await Reddit.getSubreddit(dealType).getTop();
+  let deal = [];
+  for (let i = 0; i < listOfPosts.length; i++){
+    deal.push(listOfPosts[i].title);
+  }
+  return deal;
+}
 
-console.log(Reddit.getSubreddit('SneakerDeals').submit_text);
-
+// Promise.resolve(getSubRedditDeals()).then(console.log);
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
     return (
@@ -44,14 +51,29 @@ const LaunchRequestHandler = {
       .getResponse();
   }
 };
-const HelloWorldIntentHandler = {
+
+
+const GetDealsIntentHandler = {
   canHandle(handlerInput) {
     return (
       Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest" &&
-      Alexa.getIntentName(handlerInput.requestEnvelope) === "HelloWorldIntent"
+      Alexa.getRequestType(handlerInput.requestEnvelope).startsWith("GetDeals")
     );
   },
   handle(handlerInput) {
+    const requestEnvelope = handlerInput.requestEnvelope;
+    const intent = requestEnvelope.intent;
+    
+    if (intent.confirmationStatus === "CONFIRMED") {
+      const dealType = Alexa.getSlotValue(requestEnvelope, 'dealtype');
+      let deals = '';
+      if (dealType.includes("sneaker")) {
+        deals = getSubRedditDeals("SneakerDeals"); //need the array
+      } else if (dealType.includes("frugal")) {
+        deals = getSubRedditDeals("frugalmalefashion");
+      }
+    }
+
     return (
       handlerInput.responseBuilder
         .speak(languageStrings.en.HELLO_MSG)
@@ -60,6 +82,8 @@ const HelloWorldIntentHandler = {
     );
   }
 };
+
+
 const HelpIntentHandler = {
   canHandle(handlerInput) {
     return (
@@ -76,6 +100,8 @@ const HelpIntentHandler = {
       .getResponse();
   }
 };
+
+
 const CancelAndStopIntentHandler = {
   canHandle(handlerInput) {
     return (
@@ -91,6 +117,8 @@ const CancelAndStopIntentHandler = {
     return handlerInput.responseBuilder.speak(speakOutput).getResponse();
   }
 };
+
+
 const SessionEndedRequestHandler = {
   canHandle(handlerInput) {
     return (
@@ -151,7 +179,7 @@ const ErrorHandler = {
 exports.handler = Alexa.SkillBuilders.custom()
   .addRequestHandlers(
     LaunchRequestHandler,
-    HelloWorldIntentHandler,
+    GetDealsIntentHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     SessionEndedRequestHandler,

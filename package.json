@@ -1,13 +1,13 @@
 {
-  "name": "sneaker-deals-skill",
+  "name": "reddit-dealer-skill",
   "version": "1.0.0",
-  "description": "A skill to give a flash briefing of the latest sneaker deals",
+  "description": "A skill to give a flash briefing of the latest deals",
   "main": "lambda/index.js",
   "author": "Amogh Kulkarni",
   "license": "ISC",
   "scripts": {
-		"app": "node lambda/index.js"
-	},
+    "app": "node lambda/index.js"
+  },
   "dependencies": {
     "ask-sdk-core": "^2.7.0",
     "ask-sdk-dynamodb-persistence-adapter": "^2.7.0",
