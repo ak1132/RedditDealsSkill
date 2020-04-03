@@ -1,7 +1,7 @@
 {
     "client_id": "",
     "client_secret":"",
-    "user_agent": "A skill for finding the latest sneaker deals",
+    "user_agent": "A skill for finding the latest deals on reddit",
     "refresh_token" : "",
     "access_token" : ""
   }
