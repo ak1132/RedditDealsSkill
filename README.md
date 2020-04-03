@@ -5,7 +5,7 @@ Refer [here](https://developer.amazon.com/blogs/alexa/post/77c8f0b9-e9ee-48a9-81
 
 The skill is built using Node.js and utilizes the [Snoowrap API](https://github.com/not-an-aardvark/snoowrap) for pulling information from Reddit.
 
-Information to generate Reddit OAuth tokens, refer to [link](https://browntreelabs.com/scraping-reddits-api-with-snoowrap/)
+For information to generate Reddit OAuth tokens, refer to [link](https://browntreelabs.com/scraping-reddits-api-with-snoowrap/)
 
 # Currently accepted questions answered by the skill.
 
