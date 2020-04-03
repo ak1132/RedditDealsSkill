@@ -125,9 +125,12 @@ const GetDealsIntentHandler = {
     let dT = "";
     if (dealType.includes("sneaker")) {
       dT = await getSubRedditDeals("SneakerDeals");
-    } else if (dealType.includes("frugal")) {
+    } else if (dealType.includes("male")) {
       dT = await getSubRedditDeals("frugalmalefashion");
+    } else if (dealType.includes("female")) {
+      dT = await getSubRedditDeals("FrugalFemaleFashion");
     }
+
     let speechText = "";
     if (typeof dT !== "undefined") {
       speechText = dT.map(function(x) {
