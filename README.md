@@ -7,11 +7,13 @@ The skill is built using Node.js and ultilizes the [Snoowrap API](https://github
 
 Information to generate Reddit OAuth tokens, refer to [link](https://browntreelabs.com/scraping-reddits-api-with-snoowrap/)
 
-![Skill demo](https://github.com/ak1132/RedditDealsSkill/blob/master/working.png)
-
-Currently accepted questions answered by the skill.
+# Currently accepted questions answered by the skill.
 
 1. Get me deals for men/women/male/female.
 2. Get me sneaker/frugalmalefashion/frugalfemalefashion/men fashion/female fashion deals.
 3. What's the latest deal on sneakers?
 4. Get me latest sneaker/male/female deals.
+
+![Skill demo](https://github.com/ak1132/RedditDealsSkill/blob/master/working.png)
+
+
