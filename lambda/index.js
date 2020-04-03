@@ -1,32 +1,23 @@
 // Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
 // session persistence, api calls, and more.
-"use strict";
 const Alexa = require("ask-sdk-core");
 const snoowrap = require("snoowrap");
 const creds = require("../oauth_info.json");
 const constants = require("./constants");
+const adapter = require("ask-sdk-s3-persistence-adapter");
 
-// -------------------------------------------------------------------------------------
+// --------------------PERSISTENCE ADAPTER----------------------------------------------------------------
+const s3PersistenceAdapter = new adapter.S3PersistenceAdapter({
+  bucketName: process.env.S3_PERSISTENCE_BUCKET
+});
 
-const getPersistenceAdapter = tableName => {
-  const isAlexaHosted = () => {
-    return process.env.S3_PERSISTENCE_BUCKET;
-  };
-  if (isAlexaHosted()) {
-    const S3PersistenceAdapter = require("ask-sdk-s3-persistence-adapter");
-    return new S3PersistenceAdapter({
-      bucketName: process.env.S3_PERSISTENCE_BUCKET
-    });
-  } else {
-    const DynamoDBPersistenceAdapter = require("ask-sdk-dynamodb-persistence-adapter");
-    return new DynamoDBPersistenceAdapter({
-      tableName: tableName,
-      createTable: true
-    });
-  }
-};
+// const DynamoDBPersistenceAdapter = require("ask-sdk-dynamodb-persistence-adapter");
+// const dynamoDBAdapter = new DynamoDBPersistenceAdapter({
+//       tableName: tableName,
+//       createTable: true
+// });
 
-// ------------------------------------------------------------------------------------
+// ---------------------REDDIT API----------------------------------------------------------
 
 const Reddit = new snoowrap({
   userAgent: creds.user_agent,
@@ -44,10 +35,7 @@ const getSubRedditDeals = async dealType => {
   return deal;
 };
 
-// Promise.resolve(getSubRedditDeals()).then(console.log);
-//----------------------------------------------------------------------------------------
-
-/* INTERCEPTORS */
+/*-------------------- INTERCEPTORS ------------------------------------------------------------------------*/
 
 const LoadPersistentAttributesRequestInterceptor = {
   async process(handlerInput) {
@@ -89,19 +77,24 @@ const SavePersistentAttributesResponseInterceptor = {
   }
 };
 
-// ----------------------------------------------------------------------------------------
+// -----------------------ALEXA EVENT HANDLERS-----------------------------------------------------------------
+
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
     return (
       Alexa.getRequestType(handlerInput.requestEnvelope) === "LaunchRequest"
     );
   },
-  handle(handlerInput) {
-    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+  async handle(handlerInput) {
+    const { attributesManager } = handlerInput;
+    const sessionAttributes = await attributesManager.getSessionAttributes();
     const dealType = sessionAttributes["dealtype"];
-    const sessionCounter = sessionAttributes["sessionCounter"];
 
-    if (dealType !== null && dealType !== undefined) {
+    if (
+      typeof dealType !== "undefined" &&
+      dealType !== null &&
+      dealType !== ""
+    ) {
       return GetDealsIntentHandler.handle(handlerInput);
     }
 
@@ -109,7 +102,7 @@ const LaunchRequestHandler = {
     return handlerInput.responseBuilder
       .speak(speakOutput)
       .addDelegateDirective({
-        name: "GetDealsIntent",
+        name: "GetDeals",
         confirmationStatus: "NONE",
         slots: {}
       })
@@ -121,36 +114,33 @@ const GetDealsIntentHandler = {
   canHandle(handlerInput) {
     return (
       Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest" &&
-      Alexa.getRequestType(handlerInput.requestEnvelope).startsWith("GetDeals")
+      handlerInput.requestEnvelope.request.intent.name === "GetDeals"
     );
   },
-  handle(handlerInput) {
+  async handle(handlerInput) {
     const requestEnvelope = handlerInput.requestEnvelope;
     const intent = requestEnvelope.request;
-    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
 
-    if (intent.confirmationStatus === "CONFIRMED") {
-      const dealType = Alexa.getSlotValue(requestEnvelope, "dealtype");
-      if (dealType.includes("sneaker")) {
-        Promise.resolve(getSubRedditDeals("SneakerDeals")).then(
-          s =>
-            (sessionAttributes["speakStr"] = s.join(" and the next deal is "))
-        );
-      } else if (dealType.includes("frugal")) {
-        Promise.resolve(getSubRedditDeals("frugalmalefashion")).then(
-          s =>
-            (sessionAttributes["speakStr"] = s.join(" and the next deal is "))
-        );
-      }
+    const dealType = Alexa.getSlotValue(requestEnvelope, "dealtype");
+    let dT = "";
+    if (dealType.includes("sneaker")) {
+      dT = await getSubRedditDeals("SneakerDeals");
+    } else if (dealType.includes("frugal")) {
+      dT = await getSubRedditDeals("frugalmalefashion");
     }
-
-    return (
-      handlerInput.responseBuilder
-        .speak("Here are the deals,\n" + sessionAttributes["speakStr"])
-        .reprompt("Oops, something looks wrong, by the way, how you doin?")
-        //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-        .getResponse()
-    );
+    let speechText = "";
+    if (typeof dT !== "undefined") {
+      speechText = dT.map(function(x) {
+        return x.replace(/[-&\/\\#,+()~'":*?<>{}|]/g, "");
+      });
+      speechText = speechText.join(". The next deal is ,");
+    }
+    speechText = "Here are the deals, ".concat(speechText);
+    console.log(speechText);
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .reprompt("Oops, something looks wrong, by the way, how you doin?")
+      .getResponse();
   }
 };
 
@@ -200,10 +190,6 @@ const SessionEndedRequestHandler = {
   }
 };
 
-// The intent reflector is used for interaction model testing and debugging.
-// It will simply repeat the intent the user said. You can create custom handlers
-// for your intents by defining them above, then also adding them to the request
-// handler chain below.
 const IntentReflectorHandler = {
   canHandle(handlerInput) {
     return (
@@ -214,18 +200,10 @@ const IntentReflectorHandler = {
     const intentName = Alexa.getIntentName(handlerInput.requestEnvelope);
     const speakOutput = `You just triggered ${intentName}`;
 
-    return (
-      handlerInput.responseBuilder
-        .speak(speakOutput)
-        //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-        .getResponse()
-    );
+    return handlerInput.responseBuilder.speak(speakOutput).getResponse();
   }
 };
 
-// Generic error handling to capture any syntax or routing errors. If you receive an error
-// stating the request handler chain is not found, you have not implemented a handler for
-// the intent being invoked or included it in the skill builder below.
 const ErrorHandler = {
   canHandle() {
     return true;
@@ -241,9 +219,6 @@ const ErrorHandler = {
   }
 };
 
-// The SkillBuilder acts as the entry point for your skill, routing all request and response
-// payloads to the handlers above. Make sure any new handlers or interceptors you've
-// defined are included below. The order matters - they're processed top to bottom.
 exports.handler = Alexa.SkillBuilders.custom()
   .addRequestHandlers(
     LaunchRequestHandler,
@@ -256,5 +231,5 @@ exports.handler = Alexa.SkillBuilders.custom()
   .addErrorHandlers(ErrorHandler)
   .addRequestInterceptors(LoadPersistentAttributesRequestInterceptor)
   .addResponseInterceptors(SavePersistentAttributesResponseInterceptor)
-  .withPersistenceAdapter(getPersistenceAdapter)
+  .withPersistenceAdapter(s3PersistenceAdapter)
   .lambda();
