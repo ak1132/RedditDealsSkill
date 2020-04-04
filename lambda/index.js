@@ -123,11 +123,12 @@ const GetDealsIntentHandler = {
 
     const dealType = Alexa.getSlotValue(requestEnvelope, "dealtype");
     let dT = "";
+    
     if (dealType.includes("sneaker")) {
       dT = await getSubRedditDeals("SneakerDeals");
-    } else if (dealType.includes("male")) {
+    } else if (dealType.includes("male") || dealType.includes("men") || dealType.includes("man")) {
       dT = await getSubRedditDeals("frugalmalefashion");
-    } else if (dealType.includes("female")) {
+    } else if (dealType.includes("female") || dealType.includes("women") || dealType.includes("woman")) {
       dT = await getSubRedditDeals("FrugalFemaleFashion");
     }
 
