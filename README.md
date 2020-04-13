@@ -12,6 +12,9 @@ For information to generate Reddit OAuth tokens, refer to [link](https://browntr
 3. What's the latest deal on sneakers?
 4. Get me latest sneaker/male/female deals.
 
+# Latest update
+Support for tech, steam, game and buildapc deals.
+
 ![Skill demo](https://github.com/ak1132/RedditDealsSkill/blob/master/working.png)
 
 Watch [this](https://www.youtube.com/watch?v=CzTKDu7Qgjs&list=PL2KJmkHeYQTO65ko4I--OC-7CC_Cjg8sS) to learn how to build some cool skills for your Alexa device.
