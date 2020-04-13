@@ -1,0 +1,148 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "reddit dealer",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "GetDealsIntent",
+          "slots": [
+            {
+              "name": "dealtype",
+              "type": "dealtype",
+              "samples": [
+                "{dealtype}"
+              ]
+            }
+          ],
+          "samples": [
+            "get me deals for {dealtype}",
+            "get me  {dealtype} deals",
+            "whats the latest deal on {dealtype} ",
+            "get the latest {dealtype} deals"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "values": [
+            {
+              "name": {
+                "value": "sneakers"
+              }
+            },
+            {
+              "name": {
+                "value": "female fashion"
+              }
+            },
+            {
+              "name": {
+                "value": "male fashion"
+              }
+            },
+            {
+              "name": {
+                "value": "women"
+              }
+            },
+            {
+              "name": {
+                "value": "men"
+              }
+            },
+            {
+              "name": {
+                "value": "female"
+              }
+            },
+            {
+              "name": {
+                "value": "male"
+              }
+            },
+            {
+              "name": {
+                "value": "frugalfemalefashion"
+              }
+            },
+            {
+              "name": {
+                "value": "frugalmalefashion"
+              }
+            },
+            {
+              "name": {
+                "value": "sneaker"
+              }
+            }
+          ],
+          "name": "dealtype"
+        }
+      ]
+    },
+    "dialog": {
+      "intents": [
+        {
+          "name": "GetDealsIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "dealtype",
+              "type": "dealtype",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.1103445598204.419021990513"
+              },
+              "validations": [
+                {
+                  "type": "hasEntityResolutionMatch",
+                  "prompt": "Slot.Validation.302839756634.997663111745.215588357465"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "delegationStrategy": "ALWAYS"
+    },
+    "prompts": [
+      {
+        "id": "Slot.Validation.302839756634.997663111745.215588357465",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "{dealtype}"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.1103445598204.419021990513",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Try saying whats the latest sneaker deals or whats the latest deal on mens fashion?"
+          }
+        ]
+      }
+    ]
+  },
+  "version": "6"
+}

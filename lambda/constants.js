@@ -1,12 +1,11 @@
-exports.languageStrings = {
-  en: {
-    WELCOME_MSG:
-      "Welcome, you can say what's the latest deal on sneakers? Would you like to try?",
-    HELLO_MSG: "Hi, this is Reddit Dealer, how you doing?",
-    GOODBYE_MSG: "Thank you for using me, Goodbye",
-    FALLBACK_MSG: "Sorry, didn't understand you, can you try again?",
-    HELP_MSG: "Hey, how can I help?",
-    ERROR_MSG: "Sorry, there seems to be an error, Please try again",
-    REGISTER_MSG: "Here are the latest {{dealtype}} deals"
-  }
-};
+module.exports = {
+    PERSISTENT_ATTRIBUTES_NAMES : ["dealtype", "sessionCounter"],
+    GIVEN_NAME_PERMISSION: ["alexa::profile:given_name:read"],
+    SNEAKER_DEALS: "sneakerdeals",
+    FRUGAL_MALE_FASHION: "frugalmalefashion",
+    FRUGAL_FEMALE_FASHION: "frugalfemalefashion",
+    STEAM_DEALS: "steamdeals",
+    GAME_DEALS: "gamedeals",
+    TECH_DEALS: "techdeals",
+    BUILD_A_PC_DEALS: "buildapcdeals"
+}

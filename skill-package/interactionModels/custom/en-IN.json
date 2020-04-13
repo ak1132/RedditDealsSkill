@@ -1,0 +1,102 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "reddit dealer",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "GetDeals",
+          "slots": [
+            {
+              "name": "dealtype",
+              "type": "dealtype"
+            }
+          ],
+          "samples": [
+            "get the latest {dealtype} deals"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "values": [
+            {
+              "name": {
+                "value": "frugalmalefashion"
+              }
+            },
+            {
+              "name": {
+                "value": "sneaker"
+              }
+            }
+          ],
+          "name": "dealtype"
+        }
+      ]
+    },
+    "dialog": {
+      "intents": [
+        {
+          "name": "GetDeals",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "dealtype",
+              "type": "dealtype",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.1551820986739.1028336506518"
+              },
+              "validations": [
+                {
+                  "type": "hasEntityResolutionMatch",
+                  "prompt": "Slot.Validation.302839756634.997663111745.215588357465"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "delegationStrategy": "ALWAYS"
+    },
+    "prompts": [
+      {
+        "id": "Slot.Validation.302839756634.997663111745.215588357465",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "I currently support only sneaker and frugalmalefashion"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.1551820986739.1028336506518",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "I didn\u0027t understand you, can you try saying either frugalmalefashion or sneaker?"
+          }
+        ]
+      }
+    ]
+  },
+  "version": "1"
+}

@@ -1,0 +1,107 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "reddit dealer",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "GetDeals",
+          "slots": [
+            {
+              "name": "dealtype",
+              "type": "dealtype",
+              "samples": [
+                "{dealtype}"
+              ]
+            }
+          ],
+          "samples": [
+            "whats the latest deal on {dealtype}",
+            "whats the latest {dealtype} deal",
+            "get the latest {dealtype} deals"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "values": [
+            {
+              "name": {
+                "value": "frugalmalefashion"
+              }
+            },
+            {
+              "name": {
+                "value": "sneaker"
+              }
+            }
+          ],
+          "name": "dealtype"
+        }
+      ]
+    },
+    "dialog": {
+      "intents": [
+        {
+          "name": "GetDeals",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "dealtype",
+              "type": "dealtype",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.1142388148306.163585483405"
+              },
+              "validations": [
+                {
+                  "type": "hasEntityResolutionMatch",
+                  "prompt": "Slot.Validation.302839756634.997663111745.215588357465"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "delegationStrategy": "ALWAYS"
+    },
+    "prompts": [
+      {
+        "id": "Slot.Validation.302839756634.997663111745.215588357465",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "{dealtype}"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.1142388148306.163585483405",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "I couldn\u0027t understand what you said. Can you try either frugalmalefashion or sneaker?"
+          }
+        ]
+      }
+    ]
+  },
+  "version": "3"
+}

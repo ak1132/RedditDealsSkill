@@ -1,0 +1,68 @@
+{
+  "manifest": {
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "uri": "arn:aws:lambda:us-east-1:464025429639:function:9c372e94-b2a6-446a-bb8f-89bbb5860015:Release_0"
+        },
+        "interfaces": []
+      }
+    },
+    "manifestVersion": "1.0",
+    "permissions": [
+      {
+        "name": "alexa::profile:given_name:read"
+      }
+    ],
+    "privacyAndCompliance": {
+      "locales": {
+        "en-US": {},
+        "en-IN": {},
+        "en-GB": {}
+      },
+      "allowsPurchases": false,
+      "usesPersonalInfo": false,
+      "isChildDirected": true,
+      "isExportCompliant": true,
+      "containsAds": false
+    },
+    "publishingInformation": {
+      "locales": {
+        "en-US": {
+          "name": "Reddit Dealer",
+          "summary": "A skill that gets deals from reddit pages",
+          "description": "Currently supports only Sneaker Deals",
+          "examplePhrases": [
+            "Alexa open reddit dealer",
+            "hello",
+            "help"
+          ],
+          "keywords": []
+        },
+        "en-IN": {
+          "name": "Reddit Dealer",
+          "summary": "A skill that gets deals from reddit pages",
+          "examplePhrases": [
+            "alexa open reddit dealer"
+          ],
+          "keywords": []
+        },
+        "en-GB": {
+          "name": "Reddit Dealer",
+          "summary": "A skill that gets deals from reddit pages",
+          "examplePhrases": [
+            "alexa open reddit dealer"
+          ],
+          "keywords": []
+        }
+      },
+      "isAvailableWorldwide": true,
+      "testingInstructions": "Sample Testing Instructions.",
+      "category": "FASHION_AND_STYLE",
+      "distributionCountries": [],
+      "automaticDistribution": {
+        "isActive": false
+      }
+    }
+  }
+}
