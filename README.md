@@ -15,6 +15,8 @@ For information to generate Reddit OAuth tokens, refer to [link](https://browntr
 # Latest update
 Support for tech, steam, game and buildapc deals.
 
+#Demo
+
 ![Skill demo](https://github.com/ak1132/RedditDealsSkill/blob/master/working.png)
 
 Watch [this](https://www.youtube.com/watch?v=CzTKDu7Qgjs&list=PL2KJmkHeYQTO65ko4I--OC-7CC_Cjg8sS) to learn how to build some cool skills for your Alexa device.
