@@ -73,8 +73,6 @@ const GetDealsIntentHandler = {
       dT = await Reddit.getSubRedditDeals(constants.TECH_DEALS);
     } else if (dealType.includes("game")) {
       dT = await Reddit.getSubRedditDeals(constants.GAME_DEALS);
-    } else if (dealType.includes("pc")) {
-      dT = await Reddit.getSubRedditDeals(constants.BUILD_A_PC_DEALS);
     }
 
     let speechText = "";
