@@ -1,5 +1,5 @@
 # Reddit Deals Skill
-An Alexa skill to get a flash briefing of the latest reddit deals. The skills takes the top 10 posts from either [r/SneakerDeals](https://www.reddit.com/r/SneakerDeals/), [r/FrugalFemaleFashion](https://www.reddit.com/r/FrugalFemaleFashion/), [r/frugalmalefashion](https://www.reddit.com/r/frugalmalefashion/), [r/steamdeals](https://www.reddit.com/r/steamdeals/), [r/buildapcsales](https://www.reddit.com/r/buildapcsales/) and [r/GameDeals](https://www.reddit.com/r/GameDeals/) and gives a flash briefing of the latest deal/sale.
+An Alexa skill to get a flash briefing of the latest reddit deals. The skills takes the top 10 posts from either [r/SneakerDeals](https://www.reddit.com/r/SneakerDeals/), [r/FrugalFemaleFashion](https://www.reddit.com/r/FrugalFemaleFashion/), [r/frugalmalefashion](https://www.reddit.com/r/frugalmalefashion/), [r/steamdeals](https://www.reddit.com/r/steamdeals/) and [r/GameDeals](https://www.reddit.com/r/GameDeals/) and gives a flash briefing of the latest deal/sale.
 
 The skill is built using Node.js and utilizes the [Snoowrap API](https://github.com/not-an-aardvark/snoowrap) for pulling information from Reddit.
 
@@ -13,7 +13,7 @@ For information to generate Reddit OAuth tokens, refer to [link](https://browntr
 4. Get me latest sneaker/male/female deals.
 
 # Latest update
-Support for tech, steam, game and buildapc deals.
+Support for tech, steam, and game deals.
 
 # Demo
 
