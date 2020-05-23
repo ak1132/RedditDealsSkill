@@ -7,6 +7,8 @@ We use your Personal Information i.e. given name only to provide a personalized 
 
 We just ask for user's permission to share their given name with the skill to make it more personalized.
 
+**Data Retention Policy**
+
 We will not retain any user provided data.
 
 **Log Data**
