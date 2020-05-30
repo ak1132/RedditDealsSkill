@@ -22,3 +22,5 @@ Support for tech, steam, and game deals.
 Watch [this](https://www.youtube.com/watch?v=CzTKDu7Qgjs&list=PL2KJmkHeYQTO65ko4I--OC-7CC_Cjg8sS) to learn how to build some cool skills for your Alexa device.
 
 Refer [here](https://developer.amazon.com/blogs/alexa/post/77c8f0b9-e9ee-48a9-813f-86cf7bf86747/setup-your-local-environment-for-debugging-an-alexa-skill) for information on how to debug errors on your local machine for Alexa Skills.
+
+## Skill currently Live, you can find it [here](https://www.amazon.com/dp/B089CKXD15/ref=sr_1_1?dchild=1&keywords=reddit+dealer&qid=1590798887&s=digital-skills&sr=1-1)
