@@ -1,9 +1,77 @@
 {
   "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "en-US": {
+          "summary": "A skill that gets deals from reddit pages",
+          "examplePhrases": [
+            "Alexa open reddit dealer",
+            "Alexa ask reddit dealer whats the latest deal on sneakers",
+            "Alexa ask reddit dealer whats the latest deal on male fashion"
+          ],
+          "keywords": [
+            "reddit",
+            "deals",
+            "deal"
+          ],
+          "name": "Reddit Dealer",
+          "description": "The skill will give you a flash briefing by taking deals posted by users on subreddits.\nThe following subreddits are currently supported:\n1. r/sneakerdeals\n2. r/frugalmalefashion\n3. r/frugalfemalefashion\n4. r/steamdeals\n5. r/gamedeals\nThe skill is not optimized for devices with screen.",
+          "smallIconUri": "file://assets/images/en-US_smallIconUri.png",
+          "largeIconUri": "file://assets/images/en-US_largeIconUri.png"
+        },
+        "en-IN": {
+          "summary": "A skill that gets deals from reddit pages",
+          "examplePhrases": [
+            "Alexa open reddit dealer",
+            "Alexa ask reddit dealer whats the latest deal on sneakers",
+            "Alexa ask reddit dealer whats the latest deal on male fashion"
+          ],
+          "keywords": [
+            "reddit",
+            "deals",
+            "deal"
+          ],
+          "name": "Reddit Dealer",
+          "description": "The skill will give you a flash briefing by taking deals posted by users on subreddits.\nThe following subreddits are currently supported:\n1. r/sneakerdeals\n2. r/frugalmalefashion\n3. r/frugalfemalefashion\n4. r/steamdeals\n5. r/gamedeals\nThe skill is not optimized for devices with screen.",
+          "smallIconUri": "file://assets/images/en-IN_smallIconUri.png",
+          "largeIconUri": "file://assets/images/en-IN_largeIconUri.png"
+        },
+        "en-GB": {
+          "summary": "A skill that gets deals from reddit pages",
+          "examplePhrases": [
+            "Alexa open reddit dealer",
+            "Alexa ask reddit dealer whats the latest deal on sneakers",
+            "Alexa ask reddit dealer whats the latest deal on male fashion"
+          ],
+          "keywords": [
+            "reddit",
+            "deals",
+            "deal"
+          ],
+          "name": "Reddit Dealer",
+          "description": "The skill will give you a flash briefing by taking deals posted by users on subreddits.\nThe following subreddits are currently supported:\n1. r/sneakerdeals\n2. r/frugalmalefashion\n3. r/frugalfemalefashion\n4. r/steamdeals\n5. r/gamedeals\nThe skill is not optimized for devices with screen.",
+          "smallIconUri": "file://assets/images/en-GB_smallIconUri.png",
+          "largeIconUri": "file://assets/images/en-GB_largeIconUri.png"
+        }
+      },
+      "automaticDistribution": {
+        "sourceLocaleForLanguages": [
+          {
+            "sourceLocale": "en-US",
+            "language": "en"
+          }
+        ],
+        "isActive": true
+      },
+      "isAvailableWorldwide": true,
+      "testingInstructions": "Simply invoke the skill.",
+      "category": "SHOPPING",
+      "distributionCountries": []
+    },
     "apis": {
       "custom": {
         "endpoint": {
-          "uri": "arn:aws:lambda:us-east-1"
+          "uri": "arn:aws:lambda:us-east-1:464025429639:function:9c372e94-b2a6-446a-bb8f-89bbb5860015:Release_0"
         },
         "interfaces": []
       }
@@ -15,54 +83,22 @@
       }
     ],
     "privacyAndCompliance": {
-      "locales": {
-        "en-US": {},
-        "en-IN": {},
-        "en-GB": {}
-      },
       "allowsPurchases": false,
-      "usesPersonalInfo": false,
-      "isChildDirected": true,
-      "isExportCompliant": true,
-      "containsAds": false
-    },
-    "publishingInformation": {
       "locales": {
         "en-US": {
-          "name": "Reddit Dealer",
-          "summary": "A skill that gets deals from reddit pages",
-          "description": "Currently supports only Sneaker Deals",
-          "examplePhrases": [
-            "Alexa open reddit dealer",
-            "hello",
-            "help"
-          ],
-          "keywords": []
+          "privacyPolicyUrl": "https://github.com/ak1132/RedditDealsSkill/blob/master/privacypolicy.md"
         },
         "en-IN": {
-          "name": "Reddit Dealer",
-          "summary": "A skill that gets deals from reddit pages",
-          "examplePhrases": [
-            "alexa open reddit dealer"
-          ],
-          "keywords": []
+          "privacyPolicyUrl": "https://github.com/ak1132/RedditDealsSkill/blob/master/privacypolicy.md"
         },
         "en-GB": {
-          "name": "Reddit Dealer",
-          "summary": "A skill that gets deals from reddit pages",
-          "examplePhrases": [
-            "alexa open reddit dealer"
-          ],
-          "keywords": []
+          "privacyPolicyUrl": "https://github.com/ak1132/RedditDealsSkill/blob/master/privacypolicy.md"
         }
       },
-      "isAvailableWorldwide": true,
-      "testingInstructions": "Sample Testing Instructions.",
-      "category": "FASHION_AND_STYLE",
-      "distributionCountries": [],
-      "automaticDistribution": {
-        "isActive": false
-      }
+      "containsAds": false,
+      "isExportCompliant": true,
+      "isChildDirected": false,
+      "usesPersonalInfo": true
     }
   }
 }
