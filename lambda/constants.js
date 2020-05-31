@@ -6,5 +6,4 @@ module.exports = {
     FRUGAL_FEMALE_FASHION: "frugalfemalefashion",
     STEAM_DEALS: "steamdeals",
     GAME_DEALS: "gamedeals",
-    TECH_DEALS: "techdeals"
 }
