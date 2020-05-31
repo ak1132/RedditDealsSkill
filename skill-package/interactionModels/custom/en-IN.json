@@ -13,14 +13,16 @@
         },
         {
           "name": "AMAZON.StopIntent",
-          "samples": []
+          "samples": [
+            "Thank you."
+          ]
         },
         {
           "name": "AMAZON.NavigateHomeIntent",
           "samples": []
         },
         {
-          "name": "GetDeals",
+          "name": "GetDealsIntent",
           "slots": [
             {
               "name": "dealtype",
@@ -28,6 +30,10 @@
             }
           ],
           "samples": [
+            "whats the latest {dealtype} deal",
+            "get me {dealtype} deals",
+            "whats the latest deal on {dealtype}",
+            "get me deals for {dealtype}",
             "get the latest {dealtype} deals"
           ]
         }
@@ -35,6 +41,61 @@
       "types": [
         {
           "values": [
+            {
+              "name": {
+                "value": "sneakers"
+              }
+            },
+            {
+              "name": {
+                "value": "female fashion"
+              }
+            },
+            {
+              "name": {
+                "value": "male fashion"
+              }
+            },
+            {
+              "name": {
+                "value": "steam"
+              }
+            },
+            {
+              "name": {
+                "value": "games"
+              }
+            },
+            {
+              "name": {
+                "value": "game"
+              }
+            },
+            {
+              "name": {
+                "value": "women"
+              }
+            },
+            {
+              "name": {
+                "value": "men"
+              }
+            },
+            {
+              "name": {
+                "value": "female"
+              }
+            },
+            {
+              "name": {
+                "value": "male"
+              }
+            },
+            {
+              "name": {
+                "value": "frugalfemalefashion"
+              }
+            },
             {
               "name": {
                 "value": "frugalmalefashion"
@@ -53,18 +114,16 @@
     "dialog": {
       "intents": [
         {
-          "name": "GetDeals",
+          "name": "GetDealsIntent",
           "confirmationRequired": false,
           "prompts": {},
           "slots": [
             {
               "name": "dealtype",
               "type": "dealtype",
-              "elicitationRequired": true,
+              "elicitationRequired": false,
               "confirmationRequired": false,
-              "prompts": {
-                "elicitation": "Elicit.Slot.1551820986739.1028336506518"
-              },
+              "prompts": {},
               "validations": [
                 {
                   "type": "hasEntityResolutionMatch",
@@ -92,11 +151,11 @@
         "variations": [
           {
             "type": "PlainText",
-            "value": "I didn\u0027t understand you, can you try saying either frugalmalefashion or sneaker?"
+            "value": "Try saying whats the latest sneaker deal or something like get me the latest sneaker deal"
           }
         ]
       }
     ]
   },
-  "version": "1"
+  "version": "10"
 }

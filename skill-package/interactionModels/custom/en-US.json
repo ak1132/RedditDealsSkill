@@ -24,13 +24,11 @@
           "slots": [
             {
               "name": "dealtype",
-              "type": "dealtype",
-              "samples": [
-                "{dealtype}"
-              ]
+              "type": "dealtype"
             }
           ],
           "samples": [
+            "whats the latest deal on {dealtype} fashion",
             "get me deals for {dealtype}",
             "get me  {dealtype} deals",
             "whats the latest deal on {dealtype} ",
@@ -41,6 +39,31 @@
       "types": [
         {
           "values": [
+            {
+              "name": {
+                "value": "pc"
+              }
+            },
+            {
+              "name": {
+                "value": "games"
+              }
+            },
+            {
+              "name": {
+                "value": "game"
+              }
+            },
+            {
+              "name": {
+                "value": "steam"
+              }
+            },
+            {
+              "name": {
+                "value": "tech"
+              }
+            },
             {
               "name": {
                 "value": "sneakers"
@@ -106,11 +129,9 @@
             {
               "name": "dealtype",
               "type": "dealtype",
-              "elicitationRequired": true,
+              "elicitationRequired": false,
               "confirmationRequired": false,
-              "prompts": {
-                "elicitation": "Elicit.Slot.1103445598204.419021990513"
-              },
+              "prompts": {},
               "validations": [
                 {
                   "type": "hasEntityResolutionMatch",
@@ -144,5 +165,5 @@
       }
     ]
   },
-  "version": "6"
+  "version": "9"
 }

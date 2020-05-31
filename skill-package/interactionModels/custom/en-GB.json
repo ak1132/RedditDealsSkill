@@ -20,17 +20,16 @@
           "samples": []
         },
         {
-          "name": "GetDeals",
+          "name": "GetDealsIntent",
           "slots": [
             {
               "name": "dealtype",
-              "type": "dealtype",
-              "samples": [
-                "{dealtype}"
-              ]
+              "type": "dealtype"
             }
           ],
           "samples": [
+            "get me {dealtype} deals",
+            "get me deals for {dealtype}",
             "whats the latest deal on {dealtype}",
             "whats the latest {dealtype} deal",
             "get the latest {dealtype} deals"
@@ -40,6 +39,71 @@
       "types": [
         {
           "values": [
+            {
+              "name": {
+                "value": "sneakers"
+              }
+            },
+            {
+              "name": {
+                "value": "dealtype"
+              }
+            },
+            {
+              "name": {
+                "value": "games"
+              }
+            },
+            {
+              "name": {
+                "value": "game"
+              }
+            },
+            {
+              "name": {
+                "value": "steam"
+              }
+            },
+            {
+              "name": {
+                "value": "pc"
+              }
+            },
+            {
+              "name": {
+                "value": "male"
+              }
+            },
+            {
+              "name": {
+                "value": "female"
+              }
+            },
+            {
+              "name": {
+                "value": "men"
+              }
+            },
+            {
+              "name": {
+                "value": "women"
+              }
+            },
+            {
+              "name": {
+                "value": "male fashion"
+              }
+            },
+            {
+              "name": {
+                "value": "female fashion"
+              }
+            },
+            {
+              "name": {
+                "value": "frugalfemalefashion"
+              }
+            },
             {
               "name": {
                 "value": "frugalmalefashion"
@@ -58,18 +122,16 @@
     "dialog": {
       "intents": [
         {
-          "name": "GetDeals",
+          "name": "GetDealsIntent",
           "confirmationRequired": false,
           "prompts": {},
           "slots": [
             {
               "name": "dealtype",
               "type": "dealtype",
-              "elicitationRequired": true,
+              "elicitationRequired": false,
               "confirmationRequired": false,
-              "prompts": {
-                "elicitation": "Elicit.Slot.1142388148306.163585483405"
-              },
+              "prompts": {},
               "validations": [
                 {
                   "type": "hasEntityResolutionMatch",
@@ -103,5 +165,5 @@
       }
     ]
   },
-  "version": "3"
+  "version": "6"
 }
